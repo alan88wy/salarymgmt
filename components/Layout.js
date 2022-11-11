@@ -12,13 +12,13 @@ const Layout = () => {
     let navColor = navStyles.nav + ' bg-light '
     return (
         <>
-            <Container fluid-sm >
+            <Container  className="mw-100" >
 
-                <Row className='align-items-start'>
-                    <Col xs={'auto'} md={'auto'} lg={'auto'} className='bg-light' style={{margin: 0, border: 0}}>
+                <Row className='mw-100'>
+                    <Col xs={'auto'} md={'auto'} lg={'auto'} className="w-40">
                         <NavBar />
                     </Col>
-                    <Col >
+                    <Col className='w-60'>
                     <Salaries />
                     </Col>
                 </Row>
