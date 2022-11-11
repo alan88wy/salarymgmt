@@ -9,20 +9,21 @@ import navStyles from '../styles/NavStyles.module.css'
 
 const Layout = () => {
 
+    let navColor = navStyles.nav + ' bg-light '
     return (
         <>
-        <Meta />
-        <Container fluid>
-            <Row>
-                <Col xs={'auto'} md={'auto'} lg={'auto'} className={navStyles.nav} >
-                    <NavBar />
-                </Col>
-                <Col >
-                <Salaries />
-                </Col>
-            </Row>
+            <Container fluid-sm >
 
-        </Container>
+                <Row className='align-items-start'>
+                    <Col xs={'auto'} md={'auto'} lg={'auto'} className='bg-light' style={{margin: 0, border: 0}}>
+                        <NavBar />
+                    </Col>
+                    <Col >
+                    <Salaries />
+                    </Col>
+                </Row>
+
+            </Container>
     </>
     )
 }
