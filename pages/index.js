@@ -1,11 +1,25 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+// import Head from 'next/head'
+// import Image from 'next/image'
+// import styles from '../styles/Home.module.css'
 
-export default function Home() {
+import SalaryList from '../components/SalaryList'
+
+export default function Home({ salaries }) {
   return (
-    <div className={styles.container}>
-  
+    <div>
+      <SalaryList salaries={ salaries } />
     </div>
   )
+}
+
+export const getStaticProps = async () => {
+
+
+  const salaries = {}
+
+  return {
+    props: {
+      salaries
+    }
+  }
 }

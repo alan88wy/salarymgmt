@@ -2,7 +2,7 @@ import Table from 'react-bootstrap/Table';
 
 
 
-const Salaries = () => {
+const SalaryList = () => {
   return (
     <Table striped bordered hover size="sm">
       <thead>
@@ -36,4 +36,4 @@ const Salaries = () => {
   )
 }
 
-export default Salaries
+export default SalaryList
