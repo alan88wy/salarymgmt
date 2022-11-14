@@ -3,6 +3,7 @@
 // import styles from '../styles/Home.module.css'
 
 import SalaryList from '../components/SalaryList'
+import { server } from '../config/index'
 
 export default function Home({ salaries }) {
   return (
@@ -13,9 +14,8 @@ export default function Home({ salaries }) {
 }
 
 export const getStaticProps = async () => {
-
-
-  const salaries = {}
+  const res = await fetch(`${server}/api/salaries`)
+  const salaries = await res.json()
 
   return {
     props: {

@@ -8,15 +8,15 @@ export default function handler({ query: { id } }, res) {
     let db = new sqlite3.Database(dbPath)
 
     console.log(dbPath)
-    let sql =  `SELECT id, login, name, salary FROM salary WHERE ID = '${id}'`
+    let sql =  `SELECT id, login, name, salary FROM salary WHERE ID = ?`
     
     db.serialize(function () {
-        db.all(sql, [], (err, rows) => {
+        db.get(sql, [id], (err, row) => {
             if (err) {
                 throw err
             }
     
-            res.status(200).json(rows)
+            res.status(200).json(row)
         })
     });
 

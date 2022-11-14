@@ -1,38 +1,28 @@
-import Table from 'react-bootstrap/Table';
+import { Container } from 'react-bootstrap'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
+import SalaryItem from '../components/SalaryItem'
 
 
 
-const SalaryList = () => {
+
+const SalaryList = ({ salaries }) => {
+
   return (
-    <Table striped bordered hover size="sm">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colSpan={2}>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Container >
+        <Row xs md={4} className='fw-bold lh-lg' >
+            <Col>ID</Col>
+            <Col>Name</Col>
+            <Col>Login</Col>
+            <Col>Salary</Col>
+        </Row>
+        {
+          salaries.map((salary) => (
+            <SalaryItem key={salary.id} salary={ salary } />
+          ))
+        }
+    </Container>
   )
 }
 
