@@ -51,7 +51,10 @@ function UploadCSV() {
 
             const result = await response.json()
 
-            console.log(result)
+            router.push({
+                pathname: '/success',
+                query: { processed: result.processed, discarded: result.discarded },
+              })
 
         };
         
@@ -62,7 +65,7 @@ function UploadCSV() {
 
         setValidated(true);
 
-        router.push(`/success `)
+        
     }
 
     return (

@@ -1,27 +1,25 @@
 const sqlite3 = require('sqlite3').verbose();
 const path=require('path');
-import { server } from '../../../config/index'
 
 export default function handler(req, res) {
 
     if (req.method === 'POST') {
         // Process a POST request
         let data = req.body;
-        let inserted = 0
-        let updated = 0
+        let processed = 0
         let discarded = 0
 
         if (data.length === 0) {
             res.status(200).json({message : "No record found"})
         }
 
-        let dbPath=path.join(__dirname, '../../../../salary.db');
-        let db = new sqlite3.Database(dbPath)
+        const dbPath=path.join(__dirname, '../../../../salary.db');
+        const db = new sqlite3.Database(dbPath)
 
-        let insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
-        let updateSql = `UPDATE salary SET login = ?, name = ?, salary = ? WHERE id = ?`
-        let selectSql = `SELECT * FROM salary WHERE id = ? OR login = ?`
-        let deleteSql = `DELETE FROM salary WHERE id = ?`
+        const insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
+        const updateSql = `UPDATE salary SET login = ?, name = ?, salary = ? WHERE id = ?`
+        const selectSql = `SELECT * FROM salary WHERE id = ? OR login = ?`
+        const deleteSql = `DELETE FROM salary WHERE id = ?`
 
         for (let i = 0; i < data.length; i++ && data[i] !== null) {
             if (data[i] === null) continue
@@ -31,7 +29,7 @@ export default function handler(req, res) {
                 continue
             }
 
-            inserted += 1
+            processed += 1
 
             db.all(selectSql, [data[i].id, data[i].login], (err, rows) => {
                 if (err) {
@@ -64,9 +62,6 @@ export default function handler(req, res) {
                         })
                     }
 
-                    
-
-                    
                     db.run(updateSql, [updateAll[0].login, updateAll[0].name, updateAll[0].salary, updateAll[0].id],
                         (err) => {
                             if (err) {
@@ -94,25 +89,21 @@ export default function handler(req, res) {
         }
         db.close()
 
-        console.log("Updated : ", inserted)
-
-        res.status(200).json({"inserted" : inserted, "updated" : updated, "discarded": discarded})
+        res.status(200).json({message : "Successfully saved records", discarded, processed})
 
         
     } else if (req.method === 'GET') {
         let dbPath=path.join(__dirname, '../../../../salary.db');
         let db = new sqlite3.Database(dbPath)
 
-        let sql =  `SELECT id, login, name, salary FROM salary`
+        let sql =  `SELECT id, login, name, salary FROM salary ORDER BY id`
 
-        db.serialize(function () {
-            db.all(sql, [], (err, rows) => {
-                if (err) {
-                    throw err
-                }
-                res.status(200).json(rows)
-            })
-        });
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+                throw err
+            }
+            res.status(200).json(rows)
+        })
 
         db.close()
       } else {

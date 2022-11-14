@@ -4,14 +4,11 @@ import Col from 'react-bootstrap/Col';
 
 import SalaryItem from '../components/SalaryItem'
 
-
-
-
 const SalaryList = ({ salaries }) => {
 
   return (
     <Container >
-        <Row xs md={4} className='fw-bold lh-lg' >
+        <Row  className='fw-bold lh-lg' >
             <Col>ID</Col>
             <Col>Name</Col>
             <Col>Login</Col>
