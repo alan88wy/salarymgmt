@@ -1,12 +1,15 @@
 const sqlite3 = require('sqlite3').verbose();
 const path=require('path');
-
+import { server } from '../../../config/index'
 
 export default function handler(req, res) {
 
     if (req.method === 'POST') {
         // Process a POST request
         let data = req.body;
+        let inserted = 0
+        let updated = 0
+        let discarded = 0
 
         if (data.length === 0) {
             res.status(200).json({message : "No record found"})
@@ -15,93 +18,86 @@ export default function handler(req, res) {
         let dbPath=path.join(__dirname, '../../../../salary.db');
         let db = new sqlite3.Database(dbPath)
 
-        // db.serialize(function() {
-
-        //     var stmt = db.prepare("INSERT INTO users VALUES (?,?)");
-        //     for (var i = 0; i < 10; i++) {
-        //         stmt.run("user " + i, "email " + i);
-        //     }
-        //     stmt.finalize();
-          
-        //     stmt = db.prepare("SELECT * FROM users WHERE id=?");
-        //     stmt.each(userId, function(err, row) {
-        //         console.log(row.name, row.email);
-        //     }, function(err, count) {
-        //         stmt.finalize();
-        //     });
-          
-        //   });
-
         let insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
         let updateSql = `UPDATE salary SET login = ?, name = ?, salary = ? WHERE id = ?`
         let selectSql = `SELECT * FROM salary WHERE id = ? OR login = ?`
-        let updateLoginSql = `UPDATE salary SET login = ? WHERE id = ?`
         let deleteSql = `DELETE FROM salary WHERE id = ?`
 
-        db.serialize(function () {
+        for (let i = 0; i < data.length; i++ && data[i] !== null) {
+            if (data[i] === null) continue
+            if (data[i].length < 4 || data[i].id === null || 
+                data[i].login === null || data[i].name == null || data[i].salary < 0) {
+                discarded += 1
+                continue
+            }
 
-            for (let i = 0; i < data.length; i++ && data[i] !== null) {
-                if (data[i] === null) continue
-                if (data[i].length < 4) continue
-                if (data[i].id === null) continue
-                if (data[i].login === null) continue
-                if (data[i].salary < 0.0) continue
+            inserted += 1
 
-                db.all(selectSql, [data[i].id, data[i].login], (err, rows) => {
-                    if (err) {
-                        throw err
-                    }
+            db.all(selectSql, [data[i].id, data[i].login], (err, rows) => {
+                if (err) {
+                    throw err
+                }
 
-                    if (rows.length === 0) {
-                        db.run(insertSql,
-                            [data[i].id, data[i].login, data[i].name, data[i].salary],
-                            (err) => {
-                            if (err) {
-                                throw err
-                            }
-                        })
-                    } else {
-                        let updateAll = rows.filter(sal => sal.id === data[i].id)
-                        let updateLogin = rows.filter(sal => sal.id !== data[i].id && sal.login === data[i].login)
-
-                        if (updateLogin.length > 0) {
-                            let loginId = updateAll[0].login
-
-                            console.log()
-    
-                            db.run(deleteSql, [updateLogin[0].id],
-                                (err) => {
-                                    if (err) {
-                                        throw err
-                                    }
-                            })
+                if (rows.length === 0) {
+                    
+                    db.run(insertSql,
+                        [data[i].id, data[i].login, data[i].name, data[i].salary],
+                        (err) => {
+                        if (err) {
+                            throw err
                         }
-                        
 
-                        db.run(updateSql, [updateAll[0].login, updateAll[0].name, updateAll[0].salary, updateAll[0].id],
+                        
+                    })
+
+                    
+                } else {
+                    let updateAll = rows.filter(sal => sal.id === data[i].id)
+                    let updateLogin = rows.filter(sal => sal.id !== data[i].id && sal.login === data[i].login)
+
+                    if (updateLogin.length > 0) {
+                        db.run(deleteSql, [updateLogin[0].id],
                             (err) => {
                                 if (err) {
                                     throw err
                                 }
                         })
-
-                        if (updateLogin.length > 0) {
-                            db.run(insertSql, [[updateLogin[0].id, loginId, updateLogin[0].name, updateLogin[0].salary]],
-                                (err) => {
-                                    if (err) {
-                                        throw err
-                                    }
-                            })
-                        }
                     }
-                })
-            }
-        });
 
+                    
+
+                    
+                    db.run(updateSql, [updateAll[0].login, updateAll[0].name, updateAll[0].salary, updateAll[0].id],
+                        (err) => {
+                            if (err) {
+                                throw err
+                            }
+
+                            
+                    })
+
+                    if (updateLogin.length > 0) {
+
+                        inserted += 1
+
+                        db.run(insertSql, [[updateLogin[0].id, loginId, updateLogin[0].name, updateLogin[0].salary]],
+                            (err) => {
+                                if (err) {
+                                    throw err
+                                } 
+                        })
+
+                        
+                    }
+                }
+            })
+        }
         db.close()
 
+        console.log("Updated : ", inserted)
 
-        res.status(200).json({message : "Success!"})
+        res.status(200).json({"inserted" : inserted, "updated" : updated, "discarded": discarded})
+
         
     } else if (req.method === 'GET') {
         let dbPath=path.join(__dirname, '../../../../salary.db');
