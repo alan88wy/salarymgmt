@@ -15,21 +15,39 @@ export default function handler(req, res) {
         let dbPath=path.join(__dirname, '../../../../salary.db');
         let db = new sqlite3.Database(dbPath)
 
+        // db.serialize(function() {
+
+        //     var stmt = db.prepare("INSERT INTO users VALUES (?,?)");
+        //     for (var i = 0; i < 10; i++) {
+        //         stmt.run("user " + i, "email " + i);
+        //     }
+        //     stmt.finalize();
+          
+        //     stmt = db.prepare("SELECT * FROM users WHERE id=?");
+        //     stmt.each(userId, function(err, row) {
+        //         console.log(row.name, row.email);
+        //     }, function(err, count) {
+        //         stmt.finalize();
+        //     });
+          
+        //   });
+
         let insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
         let updateSql = `UPDATE salary SET login = ?, name = ?, salary = ? WHERE id = ?`
         let selectSql = `SELECT * FROM salary WHERE id = ? OR login = ?`
-        let updateLoginSQL = `UPDATE salary SET login = ? WHERE id = ?`
+        let updateLoginSql = `UPDATE salary SET login = ? WHERE id = ?`
+        let deleteSql = `DELETE FROM salary WHERE id = ?`
 
         db.serialize(function () {
 
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++ && data[i] !== null) {
                 if (data[i] === null) continue
                 if (data[i].length < 4) continue
                 if (data[i].id === null) continue
                 if (data[i].login === null) continue
                 if (data[i].salary < 0.0) continue
 
-                db.all(selectSql, [data[i].id], (err, rows) => {
+                db.all(selectSql, [data[i].id, data[i].login], (err, rows) => {
                     if (err) {
                         throw err
                     }
@@ -46,21 +64,35 @@ export default function handler(req, res) {
                         let updateAll = rows.filter(sal => sal.id === data[i].id)
                         let updateLogin = rows.filter(sal => sal.id !== data[i].id && sal.login === data[i].login)
 
-                        let loginId = updateAll[0].login
+                        if (updateLogin.length > 0) {
+                            let loginId = updateAll[0].login
 
-                        db.run(updateSql, [updateAll.login, updateAll.name, updateAll.salary, updateAll.id],
+                            console.log()
+    
+                            db.run(deleteSql, [updateLogin[0].id],
+                                (err) => {
+                                    if (err) {
+                                        throw err
+                                    }
+                            })
+                        }
+                        
+
+                        db.run(updateSql, [updateAll[0].login, updateAll[0].name, updateAll[0].salary, updateAll[0].id],
                             (err) => {
                                 if (err) {
                                     throw err
                                 }
                         })
 
-                        db.run(updateLoginSQL, [updateLogin.login, updateLogin.id],
-                            (err) => {
-                                if (err) {
-                                    throw err
-                                }
-                        })
+                        if (updateLogin.length > 0) {
+                            db.run(insertSql, [[updateLogin[0].id, loginId, updateLogin[0].name, updateLogin[0].salary]],
+                                (err) => {
+                                    if (err) {
+                                        throw err
+                                    }
+                            })
+                        }
                     }
                 })
             }
