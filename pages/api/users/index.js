@@ -1,14 +1,13 @@
 const sqlite3 = require('sqlite3').verbose();
-const path=require('path');
 const assert = require('assert');
 const bcrypt = require('bcrypt');
-const v4 = require('uuid').v4;
 const jwt = require('jsonwebtoken');
 const jwtSecret = 'ThisIsVerySecretive2022';
 
 export default function handler(req, res) {
 
-    const dbPath=path.join(__dirname, '../../../../salary.db');
+    // const dbPath=path.join(__dirname, '../../../salary.db');
+    const dbPath = './data/salary.db'
     const db = new sqlite3.Database(dbPath)
     const saltRounds = 10
 

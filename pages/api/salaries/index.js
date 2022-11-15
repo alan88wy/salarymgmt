@@ -3,6 +3,9 @@ const path=require('path');
 
 export default function handler(req, res) {
 
+    // const dbPath=path.join(__dirname, '../../../salary.db');
+    const dbPath='./data/salary.db'
+
     if (req.method === 'POST') {
         // Process a POST request
         let data = req.body;
@@ -10,10 +13,9 @@ export default function handler(req, res) {
         let discarded = 0
 
         if (data.length === 0) {
-            res.status(200).json({message : "No record found"})
+            res.status(200).json({message : "No record given!"})
         }
 
-        const dbPath=path.join(__dirname, '../../../../salary.db');
         const db = new sqlite3.Database(dbPath)
 
         const insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
@@ -87,13 +89,13 @@ export default function handler(req, res) {
                 }
             })
         }
-        db.close()
 
         res.status(200).json({message : "Successfully saved records", discarded, processed})
 
-        
+        db.close()
+
     } else if (req.method === 'GET') {
-        let dbPath=path.join(__dirname, '../../../../salary.db');
+
         let db = new sqlite3.Database(dbPath)
 
         let sql =  `SELECT id, login, name, salary FROM salary ORDER BY id`
@@ -102,12 +104,13 @@ export default function handler(req, res) {
             if (err) {
                 throw err
             }
+
             res.status(200).json(rows)
         })
-
-        db.close()
-      } else {
-      }
+        
+    } else {
+        res.status(200).json({message : "Success"})
+    }
 
 }
 

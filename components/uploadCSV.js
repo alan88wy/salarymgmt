@@ -1,9 +1,10 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Router from 'next/router';
 import { useState } from 'react';
-import { useRouter } from "next/router";
+import Layout from '../components/Layout'
 
-function UploadCSV() {
+const UploadCSV = () => {
 
     const [validated, setValidated] = useState(false);
 
@@ -11,7 +12,7 @@ function UploadCSV() {
     let updated = 0
     let discarded = 0
 
-    const router = useRouter()
+    // const router = useRouter()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,69 +52,74 @@ function UploadCSV() {
 
             const result = await response.json()
 
-            router.push({
+            Router.push({
                 pathname: '/success',
-                query: { processed: result.processed, discarded: result.discarded },
+                query: { message: "Successfully processed CSV file!", 
+                         processed: result.processed, 
+                         discarded: result.discarded },
               })
 
-        };
-        
-        reader.onerror = function() {
-            console.log(reader.error);
-        };
-        
+      };
+      
+      reader.onerror = function() {
+          console.log(reader.error);
+      };
+      
 
-        setValidated(true);
+      setValidated(true);
 
-        
     }
 
     return (
-                // <Form onSubmit={handleSubmit}>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="fileName">
-            <Form.Label>Please Enter the file name</Form.Label>
-            <Form.Control type="file" accept=".csv" placeholder="Enter CSV file name" />
-            <Form.Text className="text-muted">
-            Please choose a csv file.
-            </Form.Text>
+        <Layout> 
+            <br />
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="fileName">
+                <Form.Label>Please Enter the file name</Form.Label>
+                <Form.Control type="file" accept=".csv" placeholder="Enter CSV file name" />
+                <Form.Text className="text-muted">
+                Please choose a csv file.
+                </Form.Text>
 
-            <Form.Text className="text-muted">
-            Please choose a csv file.
-            </Form.Text>
-            </Form.Group>
+                <Form.Text className="text-muted">
+                Please choose a csv file.
+                </Form.Text>
+                </Form.Group>
+                
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
             
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
-    );
+            </Form>
+        </Layout> 
+     
+    )
 }
 
 function csvToArray(str, delimiter = ",") {
 
-    const headers = str.slice(0, str.indexOf("\r")).split(delimiter);
+  const headers = str.slice(0, str.indexOf("\r")).split(delimiter);
 
-    const s = str.replace(/[\r]/gm, '');
-    const rows = s.slice(str.indexOf("\n") ).split("\n");
+  const s = str.replace(/[\r]/gm, '');
+  const rows = s.slice(str.indexOf("\n") ).split("\n");
 
-    const arr = rows.map(function (row) {
+  const arr = rows.map(function (row) {
 
-        const values = row.split(delimiter);
+      const values = row.split(delimiter);
 
-        if (values.length < 4) {
-            return
-        }
+      if (values.length < 4) {
+          return
+      }
 
-        const el = headers.reduce(function (object, header, index) {
-            object[header] = values[index];
-            return object;
-        }, {});
-        return el;
-    });
+      const el = headers.reduce(function (object, header, index) {
+          object[header] = values[index];
+          return object;
+      }, {});
+      return el;
+  });
 
-    // return the array
-    return arr;
-  }
+  // return the array
+  return arr;
+}
 
 export default UploadCSV

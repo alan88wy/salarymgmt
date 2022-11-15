@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import Router from 'next/router';
 import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Layout from '../components/Layout'
 
-const Signup = () => {
+const SignUp = () => {
   const [signupError, setSignupError] = useState('');
   const [signupSuccess, setSignupSuccess] = useState('');
   const [login, setLogin] = useState('');
@@ -12,6 +12,7 @@ const Signup = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [validated, setValidated] = useState(false);
   const assert = require('assert');
+
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -87,7 +88,7 @@ const Signup = () => {
     //   <input type="submit" value="Submit" />
     //   {signupError && <p style={{color: 'red'}}>{signupError}</p>}
     // </form>
-
+    <Layout> 
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <br />
         <h1>User Creation</h1>
@@ -111,14 +112,14 @@ const Signup = () => {
             </Form.Text>
         </Form.Group>
         <Button variant="primary" type="submit">
-            Login
+            Submit
         </Button>
         <br/>
         <br/>
-        <h4>{signupError ? signupError : " "}</h4>
-        <h4>{signupSuccess ? signupSuccess : " "}</h4>
+        <h4>{signupError ? signupError : signupSuccess ? signupSuccess : " "}</h4>
     </Form>
+    </Layout>
   );
 };
 
-export default Signup;
+export default SignUp;

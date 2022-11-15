@@ -1,24 +1,33 @@
 import Link from 'next/link'
-import { server } from '../../../../config/index'
-import Meta from '../../../../components/Meta'
+// using our api/articles
+import { server } from '../../../config/index'
+import Meta from '../../../components/Meta'
+// import { useRouter } from "next/router"
 
-const salary = ({ salary }) => {
-    <>
-        <Meta title={ salary.name } />
-        
-            <p>{salary.id}</p>
-            <p>{salary.name}</p>
-            <p>{salary.login}</p>
+const salary = ( { salary } ) => {
+
+    // const router = useRouter()
+    // const {id} = router.query
+
+    return (
+        <>
+            <Meta title={ salary.name }  />
+            <h1>{salary.name}</h1>
             <p>{salary.salary}</p>
             <br />
             <Link href='/'>Go Back</Link>
-    </>
+        </>
+    )
 }
+
+
+// Let's use our api
+
 
 export const getStaticProps = async (context) => {
     const res = await fetch(`${server}/api/salaries/${context.params.id}`)
 
-    const article = await res.json()
+    const salary = await res.json()
 
     return {
         props: {
@@ -43,3 +52,8 @@ export const getStaticPaths = async (context) => {
             fallback: false,
     }
 }
+
+
+
+
+export default salary

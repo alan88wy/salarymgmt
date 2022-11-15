@@ -1,15 +1,26 @@
-// import Head from 'next/head'
-// import Image from 'next/image'
-// import styles from '../styles/Home.module.css'
-
 import SalaryList from '../components/SalaryList'
 import { server } from '../config/index'
+import Login from '../components/Login'
+import verifyLogin from 'util/verifyLogin'
+import Layout from '../components/Layout'
 
 export default function Home({ salaries }) {
+
+  const data = verifyLogin();
+  const loggedIn = true
+
+
   return (
-    <div>
-      <SalaryList salaries={ salaries } />
-    </div>
+    <>
+    <Layout>
+      {!loggedIn && (
+        <Login />
+      )}
+      {loggedIn && (
+        <SalaryList salaries={ salaries }/>
+      )}
+      </Layout>
+    </>
   )
 }
 
