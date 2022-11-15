@@ -23,9 +23,9 @@ export default function handler(req, res) {
     }
 
     if (decoded) {
-      const data = {token, decoded}
+      decoded.token = token
 
-      res.json(data);
+      res.json(decoded);
       return;
     } else {
       res.status(401).json({message: 'Unable to authenticate user'});

@@ -6,9 +6,7 @@ import Layout from '../components/Layout'
 
 export default function Home({ salaries }) {
 
-  const data = verifyLogin();
-  const loggedIn = true
-
+  const {loggedIn, data} = verifyLogin();
 
   return (
     <>
@@ -17,7 +15,7 @@ export default function Home({ salaries }) {
         <Login />
       )}
       {loggedIn && (
-        <SalaryList salaries={ salaries }/>
+        <SalaryList salaries={ salaries } token={data.token}/>
       )}
       </Layout>
     </>
@@ -31,6 +29,7 @@ export const getStaticProps = async () => {
   return {
     props: {
       salaries
-    }
+    },
+    revalidate: 10
   }
 }

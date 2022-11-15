@@ -9,11 +9,10 @@ const VerifyLogin = () => {
     const { data, error } = useSWR('/api/authorizeUser', fetcher)
 
     if (error) return <h1>Failed to load</h1>
-     
-    // const token = data.token
-
-    console.log('dd ', error)
-
+  
+    // token = data.token
+    // const d = JSON.stringify(data)
+    
     if (!data) 
       return <h1>Loading...</h1>;
   
@@ -23,7 +22,7 @@ const VerifyLogin = () => {
       loggedIn = true;
     }
    
-    return loggedIn
+    return {loggedIn, data}
 };
 
 export default VerifyLogin;

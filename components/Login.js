@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -13,8 +13,10 @@ const Login = () => {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [validated, setValidated] = useState(false);
     
-    async function handleSubmit(e) {
-        // e.preventDefault()
+    const router = useRouter()
+
+    function handleSubmit(e) {
+        e.preventDefault()
 
         if (login === null || login.length === 0) {
             setSignInSuccess("")
@@ -27,7 +29,8 @@ const Login = () => {
         } else {
             setSignInError("")
 
-            await fetch('/api/authenticate', {
+            
+           fetch('/api/authenticate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -40,7 +43,6 @@ const Login = () => {
             .then((res) => res.json())
             .then((data) => {
 
-                console.log("data : ", data)
                 if (data && data.error) {
                     setSignInError(data.message);
                     return
@@ -50,9 +52,7 @@ const Login = () => {
                     setSignInSuccess(`User id ${login} login successfully`)
                     setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) })
                     
-                    Router.push({
-                        pathname: '/',
-                    })
+                    router.push('/')
                 }
 
             });

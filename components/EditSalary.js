@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const EditSalary = ({ salary }) => {
+const EditSalary = ({ salary, setEditIsOpen }) => {
    
+    const router = useRouter()
+
     const [editSuccess, setEditSuccess] = useState('');
     const [login, setLogin] = useState(salary.login);
     const [empName, setEmpName] = useState(salary.name);
@@ -58,10 +60,11 @@ const EditSalary = ({ salary }) => {
                 setSignInSuccess(`User id ${login} login successfully`)
                 setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) });
                 
-                Router.push({
+                setEditIsOpen()
+
+                router.push({
                     pathname: '/',
                 })
-
                 
             }
         });
