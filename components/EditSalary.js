@@ -49,11 +49,11 @@ const EditSalary = ({ salary, token, setEditIsOpen }) => {
         .then((res) => res.json())
         .then((data) => {
 
-            if (data.error) {
+            if (data && data.error) {
                 setEditSuccess(data.message);
             }
             
-            if (data.success) {
+            if (data && data.success) {
                 setEditSuccess(`User id ${login} login successfully`)
                 setCookie('token', token, { expires: new Date(Date.now() + (2 * 3600000)) });
                 

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ const Login = () => {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [validated, setValidated] = useState(false);
     
-    const router = useRouter()
+    // const router = useRouter()
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -49,10 +49,13 @@ const Login = () => {
                 }
 
                 if (data && data.success) {
+                    
                     setSignInSuccess(`User id ${login} login successfully`)
                     setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) })
                     
-                    router.push('/')
+                    Router.push({
+                        pathname: '/',
+                    })
                 }
 
             });

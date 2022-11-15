@@ -9,6 +9,7 @@ export default function Home({ salaries }) {
 
   const {loggedIn, data} = verifyLogin();
 
+  const token = data ? data.token ? data.token : " " : " "
   // const { salaries, isLoading } = useSalaries()
   // if (isLoading) return <h1>Loading Salaries ...</h1>
 
@@ -24,12 +25,12 @@ export default function Home({ salaries }) {
 
   return (
     <>
-    <Layout>
+    <Layout >
       {!loggedIn && (
         <Login />
       )}
       {loggedIn && (
-        <SalaryList salaries={ salaries } token={data.token}/>
+        <SalaryList salaries={ salaries } token={token}/>
       )}
       </Layout>
     </>

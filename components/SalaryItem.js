@@ -42,7 +42,6 @@ function SalaryItem( { salary, token }) {
             closeEdit();
         }
 
-        console.log("iw a")
         router.push('/')
 
 //         let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
