@@ -48,7 +48,7 @@ const Login = () => {
                     return
                 }
 
-                if (data && data.token) {
+                if (data && data.success) {
                     setSignInSuccess(`User id ${login} login successfully`)
                     setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) })
                     

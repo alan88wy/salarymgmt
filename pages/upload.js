@@ -5,7 +5,7 @@ import verifyLogin from 'util/verifyLogin'
 
 const uploadCSV = () => {
    
-    const loggedIn = true // verifyLogin();
+    const {loggedIn, data} = verifyLogin();
    
     return (
         <>

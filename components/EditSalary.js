@@ -1,19 +1,16 @@
 import React, {useState} from 'react';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const EditSalary = ({ salary, setEditIsOpen }) => {
-   
-    const router = useRouter()
+const EditSalary = ({ salary, token, setEditIsOpen }) => {
 
     const [editSuccess, setEditSuccess] = useState('');
     const [login, setLogin] = useState(salary.login);
     const [empName, setEmpName] = useState(salary.name);
     const [empSalary, setEmpSalary] = useState(salary.salary);
     const [validated, setValidated] = useState(false);
-
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -52,21 +49,24 @@ const EditSalary = ({ salary, setEditIsOpen }) => {
         .then((res) => res.json())
         .then((data) => {
 
-            if (data && data.error) {
+            if (data.error) {
                 setEditSuccess(data.message);
             }
             
-            if (data && data.token) {
-                setSignInSuccess(`User id ${login} login successfully`)
-                setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) });
+            if (data.success) {
+                setEditSuccess(`User id ${login} login successfully`)
+                setCookie('token', token, { expires: new Date(Date.now() + (2 * 3600000)) });
                 
-                setEditIsOpen()
+                setEditIsOpen(false)
 
-                router.push({
+                Router.push({
                     pathname: '/',
                 })
-                
             }
+
+
+            
+
         });
 
         setValidated(true);
@@ -83,7 +83,7 @@ const EditSalary = ({ salary, setEditIsOpen }) => {
 </svg>
                 </span>
             
-    <span className="ms-4 ps-5">Edit</span>
+    <span className="ms-3 p-5 ">Edit</span>
             </h3>
             
             <hr />
@@ -116,7 +116,7 @@ const EditSalary = ({ salary, setEditIsOpen }) => {
 
             <br/>
             <br/>
-            <h4>{editSuccess ? signInError :  " "}</h4>
+            <h4>{editSuccess ? editSuccess :  " "}</h4>
         </Form>
         </>
     )

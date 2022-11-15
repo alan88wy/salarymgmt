@@ -49,7 +49,7 @@ export default function handler(req, res) {
                     },
                 );
 
-                res.status(200).json({token});
+                res.status(200).json({token:token, success: true, message: `User id ${userId} authenticate`});
 
                 return;
 

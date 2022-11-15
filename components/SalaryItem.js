@@ -1,5 +1,6 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+// import Button from 'react-bootstrap/Button';
 import { useRouter } from 'next/router';
 import { server } from '../config/index'
 import Modal from 'react-modal'
@@ -94,13 +95,13 @@ function SalaryItem( { salary, token }) {
                     <Modal key={router.asPath}
                         isOpen={editIsOpen}
                         onRequestClose={closeEdit}
-                        shouldCloseOnOverlayClick={true}
                         ariaHideApp={false}
-                        className="w-50 h-50 p-4 border border-primary bg-white position-absolute top-50 start-50 translate-middle"
+                        className="w-25 h-50 p-4 border border-primary bg-white position-absolute top-50 start-50 translate-middle"
                     >
-                        <button onClick={closeEdit}>Cancel</button>
-                        <EditSalary salary={salary} setEditIsOpen />
+                        {/* <button onClick={closeEdit}>Cancel</button> */}
+                        <EditSalary salary={salary} token={token} setEditIsOpen={setEditIsOpen} />
                     </Modal>
+                    
                 </span>
                 <span className="m-2">   </span>
                 <span  onClick={ openDelete }>
@@ -114,7 +115,7 @@ function SalaryItem( { salary, token }) {
                         ariaHideApp={false}
                         className="w-50 h-50 p-4 border border-primary bg-white position-absolute top-50 start-50 translate-middle"
                     >
-                        <DeleteSalary salary={salary} />
+                        <DeleteSalary salary={salary} token={token} setDeleteIsOpen={setDeleteIsOpen}/>
                     </Modal>
                 </span>
             </Col>

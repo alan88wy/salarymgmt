@@ -11,7 +11,7 @@ export default function handler(req, res) {
         let data = req.body.salary;
 
         if (data.length === 0) {
-            res.status(200).json({message : "No record given!"})
+            res.status(200).json({error: true, message : "No record given!"})
         }
 
         const db = new sqlite3.Database(dbPath)
@@ -41,7 +41,7 @@ export default function handler(req, res) {
             }
         })
 
-        res.status(200).json({message : "Successfully saved records"})
+        res.status(200).json({success: true, message : "Successfully saved records"})
 
         db.close()
 
@@ -50,7 +50,7 @@ export default function handler(req, res) {
         let data = req.body.salary;
 
         if (data.length === 0) {
-            res.status(200).json({message : "No record given!"})
+            res.status(200).json({error: true, message : "No record given!"})
         }
 
         const db = new sqlite3.Database(dbPath)
@@ -66,7 +66,7 @@ export default function handler(req, res) {
             }
 
             if (rows.length === 0) {
-                res.status(401).json({message : "Record not found"})
+                res.status(401).json({error: true, message : "Record not found"})
             } else {
                 db.run(deleteSql, [data.id],(err) => {
                     if (err) {
@@ -76,7 +76,7 @@ export default function handler(req, res) {
             }
         })
 
-        res.status(200).json({message : "Successfully deleted records"})
+        res.status(200).json({success: true, message : "Successfully deleted records"})
 
         db.close()
 
@@ -96,7 +96,7 @@ export default function handler(req, res) {
         })
         
     } else {
-        res.status(200).json({message : "Success"})
+        res.status(200).json({success: true, message : "Success"})
     }
 
 }

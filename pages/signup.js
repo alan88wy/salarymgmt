@@ -4,7 +4,7 @@ import verifyLogin from 'util/verifyLogin'
 
 const Signup = () => {
 
-  const loggedIn = verifyLogin();
+  const {loggedIn, data} = verifyLogin();
  
   return (
     <>

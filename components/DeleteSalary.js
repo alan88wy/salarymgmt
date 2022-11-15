@@ -4,9 +4,9 @@ import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const DeleteSalary = ({ salary }) => {
+const DeleteSalary = ({ salary, token, setDeleteIsOpen }) => {
    
-    const [editSuccess, setEditSuccess] = useState('');
+    const [deleted, setDeleted] = useState('');
     const [login, setLogin] = useState(salary.login);
     const [empName, setEmpName] = useState(salary.name);
     const [empSalary, setEmpSalary] = useState(salary.salary);
@@ -16,22 +16,7 @@ const DeleteSalary = ({ salary }) => {
     function handleSubmit(e) {
         e.preventDefault();
 
-        if (login === null || login.length === 0) {
-            setEditSuccess("You must enter user login id!");
-            return
-        }
-
-        if (empName === null || empName.length === 0) {
-            setEditSuccess("You must enter employee name!");
-            return
-        }
-
-        if (empSalary === null || empSalary < 0) {
-            setEditSuccess("Salary must be greater than zero !");
-            return
-        }
-
-        setEditSuccess("")
+        setDeleted("")
 
         fetch('/api/salary', {
                 method: 'DELETE',
@@ -51,12 +36,14 @@ const DeleteSalary = ({ salary }) => {
         .then((data) => {
 
             if (data && data.error) {
-                setEditSuccess(data.message);
+                setDeleted(data.message);
             }
             
-            if (data && data.token) {
-                setSignInSuccess(`User id ${login} deleted successfully`)
+            if (data && data.success) {
+                setDeleted(`User id ${login} deleted successfully`)
                 setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) });
+                
+                setDeleteIsOpen(false)
                 
                 Router.push({
                     pathname: '/',
@@ -113,7 +100,7 @@ const DeleteSalary = ({ salary }) => {
 
             <br/>
             <br/>
-            <h4>{editSuccess ? signInError :  " "}</h4>
+            <h4>{deleted ? deleted :  " "}</h4>
         </Form>
         </>
     )
