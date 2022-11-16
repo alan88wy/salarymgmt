@@ -18,9 +18,12 @@ Two tables are created:
 
 
 
-## To do
+### Default login:
 
-   1. User Login verification still not working
-   2. After edit or delete, it does not automatically close the edit/delete windows. Need to reload the page.
-   3. Search function
-   4. Display user icons
+userid : admin
+password : admin
+
+### To run:
+
+* type "npm run dev" to run in development environment.
+* for production, need to change the server name to actual production server name

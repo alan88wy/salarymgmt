@@ -10,8 +10,6 @@ export default function handler(req, res) {
     const startSalary = req.query.startSalary ? req.query.startSalary : NaN
     const endSalary = req.query.endSalary ? req.query.endSalary : NaN
 
-    console.log(" end ", endSalary)
-    
     if (!isNaN(startSalary)) {
         selectSql += ` WHERE salary >= ${startSalary}`
     }
@@ -24,8 +22,6 @@ export default function handler(req, res) {
         }
         
     }
-
-    console.log(selectSql)
 
     const db = new sqlite3.Database(dbPath)
 
@@ -40,8 +36,11 @@ export default function handler(req, res) {
             let salaries = rows;
             
             res.status(200).json({success: true, salaries: salaries, message : "Successfully deleted records"})
+            
         }
     })
+
+    db.close()
 
     // res.status(200).json({success: true, salary: [], message : "Success"})
 

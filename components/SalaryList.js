@@ -30,7 +30,6 @@ const SalaryList = ({ salaries, setSalaries, token }) => {
     }
   }
 
-  console.log(address)
   const { data, error } = useSWR(address, fetcher);
 
   if (error) <p>Loading failed...</p>;
@@ -40,10 +39,6 @@ const SalaryList = ({ salaries, setSalaries, token }) => {
     setSalaries(data.salaries)
   }
 
-  const handleSubmit = (e) => {
-      console.log("abc")
-  }
-
   const handleStartSalary = async(e) => {
     setStartSalary(e.target.value)
 
@@ -51,7 +46,6 @@ const SalaryList = ({ salaries, setSalaries, token }) => {
 
   const handleEndSalary = async(e) => {
     setEndSalary(e.target.value)
-
   }
 
   return (
