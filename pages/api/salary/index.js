@@ -11,7 +11,7 @@ export default function handler(req, res) {
         let data = req.body.salary;
 
         if (data.length === 0) {
-            res.status(200).json({error: true, message : "No record given!"})
+            res.status(404).json({error: true, message : "No record given!"})
         }
 
         const db = new sqlite3.Database(dbPath)

@@ -3,11 +3,13 @@ import { server } from '../config/index'
 import Login from '../components/Login'
 import verifyLogin from 'util/verifyLogin'
 import Layout from '../components/Layout'
+import React, {useState} from 'react';
 // import useSalaries from '../data/Salaries'
 
-export default function Home({ salaries }) {
+export default function Home({ initialSalaries }) {
 
   const {loggedIn, data} = verifyLogin();
+  const [salaries, setSalaries] = useState(initialSalaries)
 
   const token = data ? data.token ? data.token : " " : " "
   // const { salaries, isLoading } = useSalaries()
@@ -20,7 +22,7 @@ export default function Home({ salaries }) {
         <Login />
       )}
       {loggedIn && (
-        <SalaryList salaries={ salaries } token={token}/>
+        <SalaryList salaries={ salaries } setSalaries={setSalaries} token={token}/>
       )}
       </Layout>
     </>
@@ -30,11 +32,11 @@ export default function Home({ salaries }) {
 export const getStaticProps = async () => {
 
   const res = await fetch(`${server}/api/salaries`)
-  const salaries = await res.json()
+  const initialSalaries = await res.json()
 
   return {
     props: {
-      salaries
+      initialSalaries
     },
     revalidate: 10
   }

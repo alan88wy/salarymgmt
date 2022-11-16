@@ -5,29 +5,52 @@ import Form from 'react-bootstrap/Form';
 import React, {useState} from 'react';
 import SalaryItem from '../components/SalaryItem'
 import Router from 'next/router'
+import useSWR from 'swr'
+import { server } from '../config/index'
 
-const SalaryList = ({ salaries, token }) => {
+const SalaryList = ({ salaries, setSalaries, token }) => {
 
   const [startSalary, setStartSalary] = useState("");
   const [endSalary, setEndSalary] = useState("");
+  // const [salaries, setSalaries] = useState([])
+
+  const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+  let address = `${server}/api/search`;
+
+  if (!isNaN(Number(startSalary))) {
+    address += `?startSalary=${Number(startSalary)}`
+  }
+
+  if (!isNaN(Number(endSalary)))  {
+    if (!isNaN(Number(startSalary)))  {
+      address += `&endSalary=${Number(endSalary)}`
+    } else {
+      address += `?endSalary=${Number(endSalary)}`
+    }
+  }
+
+  console.log(address)
+  const { data, error } = useSWR(address, fetcher);
+
+  if (error) <p>Loading failed...</p>;
+  if (!data) <h1>Loading...</h1>;
+
+  if (data && data.success) {
+    setSalaries(data.salaries)
+  }
 
   const handleSubmit = (e) => {
       console.log("abc")
   }
 
-  const handleStartSalary = useCallback(e) => {
+  const handleStartSalary = async(e) => {
     setStartSalary(e.target.value)
 
-      if (query.length) {
-        fetch(searchEndpoint(query))
-          .then((res) => res.json())
-          .then((res) => {
-            setResults(res.results)
-          })
-      } else {
-        setResults([])
-      }
-    }, [])
+  }
+
+  const handleEndSalary = async(e) => {
+    setEndSalary(e.target.value)
 
   }
 
@@ -56,7 +79,7 @@ const SalaryList = ({ salaries, token }) => {
                   </p>
 
                   <Form.Control className="input-group-text" type="number" placeholder='Maximum Salary' value={endSalary}
-                            required onChange={(e) => setEndSalary(e.target.value)} 
+                            required onChange={handleEndSalary}
                   />
                 </Col>
                 </Row>

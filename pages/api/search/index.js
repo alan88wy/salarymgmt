@@ -5,102 +5,45 @@ export default function handler(req, res) {
 
     // const dbPath=path.join(__dirname, '../../../salary.db');
     const dbPath='./data/salary.db'
-    const selectSql = `SELECT * FROM salary WHERE salary `
+    let selectSql = `SELECT * FROM salary `
 
+    const startSalary = req.query.startSalary ? req.query.startSalary : NaN
+    const endSalary = req.query.endSalary ? req.query.endSalary : NaN
 
-
-    if (req.method === 'POST') {
-        // Process a POST request
-        let data = req.body.salary;
-
-        if (data.length === 0) {
-            res.status(200).json({error: true, message : "No record given!"})
-        }
-
-        const db = new sqlite3.Database(dbPath)
-
-        const insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
-        const updateSql = `UPDATE salary SET login = ?, name = ?, salary = ? WHERE id = ?`
-        const selectSql = `SELECT * FROM salary WHERE id = ?`
-
-        db.all(selectSql, [data.id], (err, rows) => {
-            if (err) {
-                throw err
-            }
-
-            if (rows.length === 0) {
-                db.run(insertSql,
-                    [data.id, data.login, data.name, data.salary], (err) => {
-                    if (err) {
-                        throw err
-                    }
-                })
-            } else {
-                db.run(updateSql, [data.login, data.name, data.salary, data.id],(err) => {
-                    if (err) {
-                        throw err
-                    }
-                })
-            }
-        })
-
-        res.status(200).json({success: true, message : "Successfully saved records"})
-
-        db.close()
-
-    } else if (req.method === 'DELETE') {
-        // Process a POST request
-        let data = req.body.salary;
-
-        if (data.length === 0) {
-            res.status(200).json({error: true, message : "No record given!"})
-        }
-
-        const db = new sqlite3.Database(dbPath)
-
-        const insertSql = `INSERT INTO salary (id, login, name, salary)  VALUES (?, ?, ?, ?)`
-        const updateSql = `UPDATE salary SET login = ?, name = ?, salary = ? WHERE id = ?`
-        const selectSql = `SELECT * FROM salary WHERE id = ?`
-        const deleteSql = `DELETE FROM salary WHERE id = ?`
-
-        db.all(selectSql, [data.id], (err, rows) => {
-            if (err) {
-                throw err
-            }
-
-            if (rows.length === 0) {
-                res.status(401).json({error: true, message : "Record not found"})
-            } else {
-                db.run(deleteSql, [data.id],(err) => {
-                    if (err) {
-                        throw err
-                    }
-                })
-            }
-        })
-
-        res.status(200).json({success: true, message : "Successfully deleted records"})
-
-        db.close()
-
+    console.log(" end ", endSalary)
+    
+    if (!isNaN(startSalary)) {
+        selectSql += ` WHERE salary >= ${startSalary}`
     }
-    else if (req.method === 'GET') {
 
-        let db = new sqlite3.Database(dbPath)
-
-        let sql =  `SELECT id, login, name, salary FROM salary ORDER BY id`
-
-        db.all(sql, [], (err, rows) => {
-            if (err) {
-                throw err
-            }
-
-            res.status(200).json(rows)
-        })
+    if (!isNaN(endSalary) && endSalary > 0) {
+        if (!isNaN(startSalary)) {
+            selectSql += ` AND salary <= ${endSalary}`
+        } else {
+            selectSql += ` WHERE salary <= ${endSalary}`
+        }
         
-    } else {
-        res.status(200).json({success: true, message : "Success"})
     }
+
+    console.log(selectSql)
+
+    const db = new sqlite3.Database(dbPath)
+
+    db.all(selectSql, [], (err, rows) => {
+        if (err) {
+            throw err
+        }
+
+        if (rows.length === 0) {
+            res.status(404).json({error: true, message : "Record not found"})
+        } else {
+            let salaries = rows;
+            
+            res.status(200).json({success: true, salaries: salaries, message : "Successfully deleted records"})
+        }
+    })
+
+    // res.status(200).json({success: true, salary: [], message : "Success"})
 
 }
 
