@@ -48,7 +48,7 @@ const SalaryList = ({ salaries, setSalaries, token }) => {
   }
 
   return (
-    <div className='d-flex flex-column p-2 h-auto' >
+    <div className='d-flex flex-column p-1' >
       <Container >
         <Form className="mb-2" >
             <Row className="fw-bold" >
@@ -80,7 +80,7 @@ const SalaryList = ({ salaries, setSalaries, token }) => {
  
       <hr />
       
-          <Row xs md={5} className='lh-lg fw-bold rounded-3 bg-opacity-25 border border-3 border-white ' >
+          <Row className='lh-lg fw-bold rounded-3 bg-opacity-25 border border-3 border-white ' >
               <Col>ID</Col>
               <Col>Name</Col>
               <Col>Login</Col>

@@ -9,7 +9,7 @@ const NavBar = () => {
   const name = data ? data.userId ? data.userId : "No Name" : "No Name"
 
   return (
-    <div className="d-flex flex-column vh-100 p-1 bg-secondary col col-lg">
+    <div className="d-flex flex-column vh-100 bg-secondary">
       <p className="text-center mt-3" >
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" className="bi bi-person-circle" viewBox="0 0 16 16">
           <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -22,12 +22,12 @@ const NavBar = () => {
       </p>
       <br />
       <br />
-      <div className="ms-1">
-          <Nav defaultActiveKey="/home"  >
+      <div className="">
+          <Nav className="m-1 d-flex flex-column" defaultActiveKey="/home"  >
             <Nav.Link className="text-white " href="/">Home</Nav.Link>
             <Nav.Link className="text-white" href="/upload">Upload Salary</Nav.Link>
             <Nav.Link className="text-white" href="/signup" >
-              Create User
+              User
             </Nav.Link>
             
           </Nav>

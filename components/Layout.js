@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
             
             <div className='d-flex flex-row'>
                 <NavBar />
-                <Container xs={1} md={2}>
+                <Container >
                     {children}
                 </Container>
                 

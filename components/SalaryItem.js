@@ -72,7 +72,7 @@ function SalaryItem( { salary, token }) {
     // Modal.setAppElement(document.getElementById('root'));
 
     return (
-        <Row xs md={5} className='lh-lg bg-secondary rounded-3 bg-opacity-25 border border-3 border-white' >
+        <Row className='lh-lg bg-secondary rounded-3 bg-opacity-25 border border-3 border-white' >
             <Col >
                 { salary.id }
             </Col>
