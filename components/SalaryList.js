@@ -12,7 +12,6 @@ const SalaryList = ({ salaries, setSalaries, token }) => {
 
   const [startSalary, setStartSalary] = useState("");
   const [endSalary, setEndSalary] = useState("");
-  // const [salaries, setSalaries] = useState([])
 
   const fetcher = (...args) => fetch(...args).then(res => res.json())
 

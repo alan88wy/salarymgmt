@@ -27,3 +27,8 @@ password : admin
 
 * type "npm run dev" to run in development environment.
 * for production, need to change the server name to actual production server name
+
+
+# Issues
+
+1. After login in, it does not automatically go to home page until some time. Need to click on Home to get to home page after login.

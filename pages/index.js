@@ -6,10 +6,10 @@ import Layout from '../components/Layout'
 import React, {useState} from 'react';
 // import useSalaries from '../data/Salaries'
 
-export default function Home({ initialSalaries }) {
+export default function Home() {
 
   const {loggedIn, data} = verifyLogin();
-  const [salaries, setSalaries] = useState(initialSalaries)
+  const [salaries, setSalaries] = useState([])
 
   const token = data ? data.token ? data.token : " " : " "
   // const { salaries, isLoading } = useSalaries()
@@ -29,15 +29,15 @@ export default function Home({ initialSalaries }) {
   )
 }
 
-export const getStaticProps = async () => {
+// export const getStaticProps = async () => {
 
-  const res = await fetch(`${server}/api/salaries`)
-  const initialSalaries = await res.json()
+//   const res = await fetch(`${server}/api/salaries`)
+//   const initialSalaries = await res.json()
 
-  return {
-    props: {
-      initialSalaries
-    },
-    revalidate: 10
-  }
-}
+//   return {
+//     props: {
+//       initialSalaries
+//     },
+//     revalidate: 10
+//   }
+// }
