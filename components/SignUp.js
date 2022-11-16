@@ -3,6 +3,7 @@ import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Layout from '../components/Layout'
+import Router from 'next/router'
 
 const SignUp = () => {
   const [signupError, setSignupError] = useState('');

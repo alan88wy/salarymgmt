@@ -13,16 +13,6 @@ export default function Home({ salaries }) {
   // const { salaries, isLoading } = useSalaries()
   // if (isLoading) return <h1>Loading Salaries ...</h1>
 
-
-  // const [user, setUser] = useState(null)
-
-  // fetch data
-  // useEffect(() => {
-  //   fetch('/api/user')
-  //     .then(res => res.json())
-  //     .then(data => setUser(data))
-  // }, [])
-
   return (
     <>
     <Layout >
@@ -38,6 +28,7 @@ export default function Home({ salaries }) {
 }
 
 export const getStaticProps = async () => {
+
   const res = await fetch(`${server}/api/salaries`)
   const salaries = await res.json()
 

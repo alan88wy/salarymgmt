@@ -50,16 +50,18 @@ const Login = () => {
 
                 if (data && data.success) {
                     
-                    setSignInSuccess(`User id ${login} login successfully`)
+                    setSignInSuccess(`User id ${login} login successfully. Click Home to continue`)
                     setCookie('token', data.token, { expires: new Date(Date.now() + (2 * 3600000)) })
                     
                     Router.push({
                         pathname: '/',
                     })
+        
                 }
 
-            });
+            })
 
+            
             setValidated(true);
         }
     }

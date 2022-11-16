@@ -23,7 +23,7 @@ export default function handler(req, res) {
     }
 
     if (decoded) {
-      decoded.token = token
+      decoded.token = token  
 
       res.json(decoded);
       return;
