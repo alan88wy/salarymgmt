@@ -71,7 +71,7 @@ const UploadCSV = () => {
     }
 
     return (
-        <Layout> 
+        <> 
             <br />
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="fileName">
@@ -91,7 +91,7 @@ const UploadCSV = () => {
                 </Button>
             
             </Form>
-        </Layout> 
+        </> 
      
     )
 }

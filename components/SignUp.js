@@ -89,7 +89,6 @@ const SignUp = () => {
     //   <input type="submit" value="Submit" />
     //   {signupError && <p style={{color: 'red'}}>{signupError}</p>}
     // </form>
-    <Layout> 
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <br />
         <h1>User Creation</h1>
@@ -119,7 +118,7 @@ const SignUp = () => {
         <br/>
         <h4>{signupError ? signupError : signupSuccess ? signupSuccess : " "}</h4>
     </Form>
-    </Layout>
+
   );
 };
 

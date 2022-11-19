@@ -17,14 +17,12 @@ export default function Home() {
 
   return (
     <>
-    <Layout >
       {!loggedIn && (
         <Login />
       )}
       {loggedIn && (
         <SalaryList salaries={ salaries } setSalaries={setSalaries} token={token}/>
       )}
-      </Layout>
     </>
   )
 }

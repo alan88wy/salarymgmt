@@ -6,9 +6,9 @@ import SSRProvider from 'react-bootstrap/SSRProvider';
 function MyApp({ Component, pageProps }) {
   return (
     <SSRProvider>
-      {/* <Layout> */}
+      <Layout> 
         <Component {...pageProps} />
-      {/* </Layout> */}
+      </Layout>
     </SSRProvider>
 
   )
