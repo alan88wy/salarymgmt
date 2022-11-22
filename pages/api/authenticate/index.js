@@ -9,7 +9,7 @@ function authenticateUser(userId, password, hash, callback) {
   bcrypt.compare(password, hash, callback);
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === 'POST') {
     //login
 
@@ -35,35 +35,36 @@ export default function handler(req, res) {
 
             authenticateUser(userId, password, row[0].password, function(err, success) {
             
-              if (err) {
-                res.status(500).json({error: true, message: 'User Authentication Failed'});
-              }
-              
-              if (success) {
+            if (err) {
+              res.status(500).json({error: true, message: 'User Authentication Failed'});
+              return
+            }
+            
+            if (success) {
 
-                const token = jwt.sign(
-                    {userId: row[0].id},
-                    jwtSecret,
-                    {
-                    expiresIn: 3000, //50 minutes
-                    },
-                );
+              const token = jwt.sign(
+                  {userId: row[0].id},
+                  jwtSecret,
+                  {
+                  expiresIn: 3000, //50 minutes
+                  },
+              );
 
-                res.status(200).json({token:token, success: true, message: `User id ${userId} authenticate`});
+              res.status(200).json({token:token, success: true, message: `User id ${userId} authenticate`});
 
+              return;
+
+            } else {
+                res.status(401).json({error: true, message: 'User Authentication Failed'});
                 return;
-
-              } else {
-                  res.status(401).json({error: true, message: 'User Authentication Failed'});
-                  return;
-              }
+            }
           });
           }
     })
 
   } else {
     // Handle any other HTTP method
-    res.statusCode = 401;
-    res.end();
+    res.status(401).end();
+    return
   }
 };

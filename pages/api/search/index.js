@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const path=require('path');
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
 
     // const dbPath=path.join(__dirname, '../../../salary.db');
     const dbPath='./data/salary.db'
@@ -28,6 +28,7 @@ export default function handler(req, res) {
     db.all(selectSql, [], (err, rows) => {
         if (err) {
             throw err
+            return
         }
 
         if (rows.length === 0) {
@@ -35,14 +36,15 @@ export default function handler(req, res) {
         } else {
             let salaries = rows;
             
-            res.status(200).json({success: true, salaries: salaries, message : "Successfully deleted records"})
+            res.status(200).json({success: true, salaries: salaries, message : "Successfully retrieved records"})
+            
             
         }
     })
 
     db.close()
 
-    // res.status(200).json({success: true, salary: [], message : "Success"})
+    return
 
 }
 

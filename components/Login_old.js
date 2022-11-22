@@ -3,13 +3,14 @@ import Router from 'next/router';
 import { setCookie } from 'cookies-next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 
 const Login = () => {
     const [signInError, setSignInError] = useState('');
     const [signInSuccess, setSignInSuccess] = useState('');
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [validated, setValidated] = useState(false);
     
     // const router = useRouter()
@@ -74,7 +75,6 @@ const Login = () => {
             <Form.Group className="mb-3" controlId="login">
                 <Form.Label>Please Enter the user login id</Form.Label>
                 <Form.Control type="text" placeholder="Enter user login id"
-                            value = {login}
                             required onChange={(e) => setLogin(e.target.value)}
                 />
 
@@ -82,8 +82,7 @@ const Login = () => {
 
             <Form.Group className="mb-3" controlId="password">
                 <Form.Control type="password" placeholder='Enter the user password'
-                            value = {password}
-                            onChange={(e) => setPassword(e.target.value)} required
+                onChange={(e) => setPassword(e.target.value)} required
                 // aria-describedby="passwordHelp"
                 />
                 {/* <Form.Text id="passwordHelp" muted>
